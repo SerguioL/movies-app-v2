@@ -13,10 +13,10 @@ const getMovies = () => fetch(GLITCH)
 <button class="delete" data-id="${movie.id}" >Delete</button>
 <ul class="hidden">
     <li>
-        <input class="addRating" name="rating" type="text" placeholder="Title"/>
+        <input class="addRating" name="rating" type="text" placeholder="Title" id="newTitle${movie.id}"/>
     </li>
     <li>
-        <input class="addTitle" name="title" type="text" placeholder="Rating"/>
+        <input class="addTitle" name="title" type="text" placeholder="Rating" id="newRating${movie.id}"/>
     </li>
     <li>
         <button type="submit" data-id="${movie.id}" class="submitM">Submit</button>
@@ -44,12 +44,15 @@ const getMovies = () => fetch(GLITCH)
         });
 
         $(".submitM").click(function (){
-            var newMovieT = $(this)[0].parentElement.parentElement.children[0].children[0].value
-            var newMovieR = $(this)[0].parentElement.parentElement.children[1].children[0].value
+            // var newMovieT = $(this)[0].parentElement.parentElement.children[0].children[0].value
+            // var newMovieR = $(this)[0].parentElement.parentElement.children[1].children[0].value
+            var id = $(this).attr("data-id")
+            var newMovieTitle = $(`#newTitle${id}`);
+            var newMovieRating = $(`#newRating${id}`);
             var newMovie = {
-                title: newMovieT,
-                rating: newMovieR,
-                id: $(this).attr("data-id")
+                id,
+                title: newMovieTitle[0].value,
+                rating: newMovieRating[0].value,
             }
             console.log(newMovie);
             // $("article").remove();
@@ -96,6 +99,7 @@ const deleteMovie = id => fetch(`${GLITCH}/${id}`, {
     })
     .catch(console.error);
 
+
 const addMovie = (film) => fetch(`${GLITCH}`, {
     method: 'POST',
     headers: {
@@ -111,11 +115,14 @@ const addMovie = (film) => fetch(`${GLITCH}`, {
     })
     .catch(console.error);
 
+
+//add button when you click on it will take the value of addTitle and addRating and put them into a function
+//called addMovie which will render all the movies with the new movie added to existing
 $('#addButton').click(function (e) {
     e.preventDefault();
-    let x = $('#addTitle').val();
-    let y = $('#addRating').val();
-    let mObj = {title: x, rating: y};
+    let addNewTitle = $('#addTitle').val();
+    let addNewRating = $('#addRating').val();
+    let mObj = {title: addNewTitle, rating: addNewRating};
     addMovie(mObj);
 
 
