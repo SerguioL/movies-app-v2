@@ -1,0 +1,27 @@
+.hidden{
+    display: none;
+}
+li{
+    list-style: none;
+}
+
+.stuff1{
+    border: 2px solid black;
+    height: 250px;
+    width: 150px;
+}
+
+article{
+    padding: 10px;
+}
+
+.stuff2{
+    border: 2px solid black;
+    height: 250px;
+    width: 150px;
+    text-align: center;
+}
+
+ul{
+    padding: 0;
+}
