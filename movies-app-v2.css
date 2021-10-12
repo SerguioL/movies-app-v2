@@ -1,3 +1,10 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .hidden{
     display: none;
 }
@@ -5,23 +12,141 @@ li{
     list-style: none;
 }
 
-.stuff1{
-    border: 2px solid black;
-    height: 250px;
-    width: 150px;
-}
-
 article{
     padding: 10px;
 }
 
-.stuff2{
-    border: 2px solid black;
-    height: 250px;
-    width: 150px;
-    text-align: center;
-}
-
 ul{
     padding: 0;
+}
+nav{
+    width: 100%;
+    background-color: #312F2F;
+    box-shadow:  5px 5px 5px #F46036;
+    color: white;
+    /* position: relative; */
+    /*display: -ms-flexbox;*/
+    /* display: flex;*/
+    /*-ms-flex-wrap: wrap;*/
+    /* flex-wrap: wrap;*/
+    /*-ms-flex-align: center;*/
+    /* align-items: center;*/
+    /*-ms-flex-pack: justify;*/
+    /* justify-content: space-between;*/
+    padding: .5rem 1rem;
+}
+
+body{
+    background-color: #04151F;
+}
+/*04151F
+04151*/
+section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+/*.card{*/
+/*    border: 2px black solid;*/
+/*    flex-wrap:wrap;*/
+/*    text-align: center;*/
+/*    width: 200px;*/
+/*}*/
+
+.moreInfo:hover{
+    color: #F46036;
+    text-decoration: underline;
+}
+
+.lessInfo:hover{
+    color: #F46036;
+    text-decoration: underline;
+}
+
+span{
+    color: #F46036;
+    text-decoration: underline;
+}
+
+img{
+    width: 400px;
+    height: 511px;
+    border-radius: 20px;
+}
+
+
+.main-container{
+    position: relative;
+    width: 400px;
+    height: 850px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*sets the size or the card and holds the front and back of the card*/
+}
+
+
+
+.the-card{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;/*Without this you will only be flipping the front card*/
+    transition: all 0.5s ease;
+    /*box-shadow:  5px 5px 5px 5px grey;*/
+
+}
+
+.the-cardFlip{
+    transform: rotateY(180deg);
+}
+
+.the-front{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: #312F2F;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow:  5px 5px 5px 5px #F46036;
+    /*    this the default */
+}
+
+p{
+    margin: 5px;
+}
+
+button{
+    margin-bottom: 5px;
+}
+
+.the-back{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: #312F2F;
+    color: white;
+    /*text-align: center;*/
+    border-radius: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    box-shadow:  5px 5px 5px 5px #F46036;
+    transform: rotateY(180deg);
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    width: 78px;
+    height: 35px;
+}
+
+.buttonOrder{
+
 }
