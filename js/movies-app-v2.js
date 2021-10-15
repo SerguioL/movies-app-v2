@@ -7,41 +7,55 @@ const getMovies = () => fetch(GLITCH)
     .then(res => res.json())
     .then(data => {
         $("#cards").html("")
-        console.log(data)
-        data.forEach(async function (movie) {
-
-            var title = movie.title;
-            const movieData = await getMovieInfo(title);
-            $('#cards').append(renderMovies(movie, movieData));
-        })
+        // console.log(data)
+        // data.forEach(async function (movie) {
+        //
+        //     var title = movie.title;
+        //     const movieData = await getMovieInfo(title);
+        //     console.log(movieData);
+        //     $('#cards').append(renderMovies(movie, movieData));
+        // })
+                Promise.all(data.map( function (movie){
+            return getMovieInfo(movie.title);
+        })).then(function (movies){
+            // console.log(movies);
+            // console.log(data);
+            //merge movies and data array together
+            //loop over last merge array to render over each movie
+            movies.forEach(function (movie,index){
+                console.log(data);
+                console.log(movie);
+                $('#cards').append(renderMovies(data[index],movie));
+            })
+        });
     })
     .catch(console.error);
 
-function renderMovies(movie,data2){
+function renderMovies(data,movie){
    return  `<article>
 
     <div class="main-container"> 
     
-       <div class="the-card" id="cardID${movie.id}"> 
+       <div class="the-card" id="cardID${data.id}"> 
             <div class="the-front card">
-                <img src="${data2.Poster}" alt="Movie poster"/>
-                <p>${movie.title}</p>
-                <p>Your Rating: ${movie.rating}</p>
-                <p>Watched: ${movie.watched}</p>
-                <p class="moreInfo" data-id="${movie.id}">Click For more Info</p>
+                <img src="${movie.Poster}" alt="Movie poster"/>
+                <p>${data.title}</p>
+                <p>Your Rating: ${data.rating}</p>
+                <p>Watched: ${data.watched}</p>
+                <p class="moreInfo" data-id="${data.id}">Click For more Info</p>
                 <div class="buttonOrder">
-                <button class="edit btn btn-info" data-id="${movie.id}" >Edit</button>
-                <button class="delete btn btn-danger" data-id="${movie.id}" >Delete</button>
+                <button class="edit btn btn-info" data-id="${data.id}" >Edit</button>
+                <button class="delete btn btn-danger" data-id="${data.id}" >Delete</button>
                 </div>
-                <ul class="hidden" id="form${movie.id}">
+                <ul class="hidden" id="form${data.id}">
                     <li>
-                        <label for="newTitle${movie.id}">Title</label>
-                        <input name="title" type="text" placeholder="Title" value="${movie.title}" id="newTitle${movie.id}"/>
+                        <label for="newTitle${data.id}">Title</label>
+                        <input name="title" type="text" placeholder="Title" value="${data.title}" id="newTitle${data.id}"/>
                     </li>
                     <li>
-            <!--            <input class="addTitle" name="rating" type="text" placeholder="Rating" id="newRating${movie.id}"/>-->
-                          <label for="newRating${movie.id}">Rating</label>
-                          <select name="rating" id="newRating${movie.id}">
+            <!--            <input class="addTitle" name="rating" type="text" placeholder="Rating" id="newRating${data.id}"/>-->
+                          <label for="newRating${data.id}">Rating</label>
+                          <select name="rating" id="newRating${data.id}">
                              <option value="1">1</option>
                              <option value="2">2</option>
                              <option value="3">3</option>
@@ -55,28 +69,28 @@ function renderMovies(movie,data2){
                          </select>
                     </li>
                     <li>
-                         <label for="newWatched${movie.id}">Watched</label>
-                        <select id="newWatched${movie.id}">
+                         <label for="newWatched${data.id}">Watched</label>
+                        <select id="newWatched${data.id}">
                             <option value="yes">yes</option>
                             <option value="no">no</option>
                         </select>
                     </li>
                     <li>
-                        <button type="submit" data-id="${movie.id}" class="submitMovies btn btn-primary">Submit</button>
+                        <button type="submit" data-id="${data.id}" class="submitMovies btn btn-primary">Submit</button>
                     </li>
                 </ul>
                 </div>
               
             <div class="the-back">
-                <p><span>Actors:</span> ${data2.Actors}</p>
-                <p><span>Genre:</span> ${data2.Genre}</p>
-                <p><span>Rated:</span> ${data2.Rated}</p>
-                <p><span>Production:</span> ${data2.Production}</p>
-                <p><span>Writer:</span> ${data2.Writer}</p>
-                <p><span>Released Date:</span> ${data2.Released}</p>
-                <p><span>imdbRating:</span> ${data2.imdbRating}</p>
-                <p><span>Plot:</span> ${data2.Plot}</p>
-                <p class="lessInfo" data-id="${movie.id}" >Show Less Info</p>
+                <p><span>Actors:</span> ${movie.Actors}</p>
+                <p><span>Genre:</span> ${movie.Genre}</p>
+                <p><span>Rated:</span> ${movie.Rated}</p>
+                <p><span>Production:</span> ${movie.Production}</p>
+                <p><span>Writer:</span> ${movie.Writer}</p>
+                <p><span>Released Date:</span> ${movie.Released}</p>
+                <p><span>imdbRating:</span> ${movie.imdbRating}</p>
+                <p><span>Plot:</span> ${movie.Plot}</p>
+                <p class="lessInfo" data-id="${data.id}" >Show Less Info</p>
                 </div>   
        </div>        
    </div>
@@ -122,8 +136,11 @@ body.on("click", ".submitMovies", function (){
     // var newMovieR = $(this)[0].parentElement.parentElement.children[1].children[0].value
     var id = $(this).attr("data-id")
     var newMovieTitle = $(`#newTitle${id}`);
+    console.log(newMovieTitle[0]);
     var newMovieRating = $(`#newRating${id}`);
+    console.log(newMovieRating[0]);
     var newWatched = $(`#newWatched${id}`);
+    console.log(newWatched[0]);
     var newMovie = {
         id,
         title: newMovieTitle[0].value,
@@ -138,7 +155,7 @@ function getMovieInfo(title){
    return  fetch(`${POSTER}&t=${title}`)
         .then(res => res.json())
         .then(data2 => {
-            console.log(data2)
+            // console.log(data2)
             return data2
         })
         .catch(console.error);
@@ -156,6 +173,8 @@ function getMovieInfo(title){
         let mObj = {title: addNewTitle, rating: addNewRating, watched: addNewWatched};
         addMovie(mObj);
     });
+
+
 
 
 
