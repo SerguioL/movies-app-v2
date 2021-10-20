@@ -2,19 +2,17 @@ const GLITCH = 'https://uneven-organic-meteoroid.glitch.me/movies';
 
 const POSTER = `http://www.omdbapi.com/?apikey=${OMDP_API}`;
 
+// $(document).ajaxStart(function() {
+//     $("#Loading").show();
+// }).ajaxComplete(function() {
+//     $("#Loading").hide();
+// });
 
 const getMovies = () => fetch(GLITCH)
     .then(res => res.json())
     .then(data => {
+        $("#Loading").css("visibility", "visible");
         $("#cards").html("")
-        // console.log(data)
-        // data.forEach(async function (movie) {
-        //
-        //     var title = movie.title;
-        //     const movieData = await getMovieInfo(title);
-        //     console.log(movieData);
-        //     $('#cards').append(renderMovies(movie, movieData));
-        // })
                 Promise.all(data.map( function (movie){
             return getMovieInfo(movie.title);
         })).then(function (movies){
@@ -26,6 +24,7 @@ const getMovies = () => fetch(GLITCH)
                 console.log(data);
                 console.log(movie);
                 $('#cards').append(renderMovies(data[index],movie));
+                $("#Loading").css("visibility", "hidden");
             })
         });
     })
@@ -131,6 +130,7 @@ body.on("click", ".edit", function (){
 
 });
 
+
 body.on("click", ".submitMovies", function (){
     // var newMovieT = $(this)[0].parentElement.parentElement.children[0].children[0].value
     // var newMovieR = $(this)[0].parentElement.parentElement.children[1].children[0].value
@@ -173,9 +173,6 @@ function getMovieInfo(title){
         let mObj = {title: addNewTitle, rating: addNewRating, watched: addNewWatched};
         addMovie(mObj);
     });
-
-
-
 
 
 
