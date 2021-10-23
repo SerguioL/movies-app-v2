@@ -5,19 +5,17 @@
     <title>Movies App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" href="movies-app-v2.css">
+    <link rel="stylesheet" href="css/movies-app-v2.css">
 </head>
 <body>
 
 <nav class="navbar">
     <h1>Movies App</h1>
-    <ul id="addbar">
-        <li>
+    <div id="addBar">
+
             <label for="addTitle"> Title</label>
             <input id="addTitle" name="title" type="text" placeholder="Title"/>
-        </li>
-        <li>
-<!--            <input id="addRating" name="rating" type="text" placeholder="Rating"/>-->
+
             <label for="addRating"> Rating</label>
             <select id="addRating">
                 <option value="1">1</option>
@@ -31,21 +29,27 @@
                 <option value="9">9</option>
                 <option value="10">10</option>
             </select>
-        </li>
-        <li>
+
             <label for="addWatched">Watched</label>
             <select id="addWatched">
                 <option value="yes">yes</option>
                 <option value="no">no</option>
             </select>
-        </li>
-    </ul>
+
+
     <button id="addButton" class="btn btn-primary">Add</button>
+    </div>
 </nav>
 
 <main>
+<!-- This makes the loading spinner-->
+    <div class="d-flex justify-content-center">
+        <div id="Loading" class="spinner-border text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 
-
+<!-- This where the cards placed-->
         <section id="cards"></section>
 
 
@@ -53,7 +57,7 @@
 
 <script src="js/jQuery.js"></script>
 <script src="js/keys.js"></script>
-<script src="js/crudjs.js"></script>
+<script src="js/CRUDjs.js"></script>
 <script src="js/movies-app-v2.js"></script>
 </body>
 </html>

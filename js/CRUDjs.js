@@ -45,3 +45,4 @@ const addMovie = (film) => fetch(`${GLITCH}`, {
         return data.id; // to access the primary key of the newly created entity
     })
 .catch(console.error);
+

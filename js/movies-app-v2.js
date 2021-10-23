@@ -1,40 +1,98 @@
 const GLITCH = 'https://uneven-organic-meteoroid.glitch.me/movies';
 
-const POSTER = `http://www.omdbapi.com/?apikey=${OMDP_API}`;
+const MOVIEINFO = `http://www.omdbapi.com/?apikey=${OMDP_API}`;
 
-// $(document).ajaxStart(function() {
-//     $("#Loading").show();
-// }).ajaxComplete(function() {
-//     $("#Loading").hide();
-// });
+//targets the body of the html
+const body = $('body');
 
 const getMovies = () => fetch(GLITCH)
     .then(res => res.json())
     .then(data => {
         $("#Loading").css("visibility", "visible");
         $("#cards").html("")
-                Promise.all(data.map( function (movie){
+                Promise.all(data.map( function (movie){// waits for all the movies to get fetch so there in order based on which movie were added
             return getMovieInfo(movie.title);
         })).then(function (movies){
-            // console.log(movies);
-            // console.log(data);
-            //merge movies and data array together
-            //loop over last merge array to render over each movie
             movies.forEach(function (movie,index){
-                console.log(data);
-                console.log(movie);
-                $('#cards').append(renderMovies(data[index],movie));
+                $('#cards').append(renderMovies(data[index],movie));// loops through glitch data
                 $("#Loading").css("visibility", "hidden");
             })
         });
     })
     .catch(console.error);
 
+
+//When the .moreInfo class is clicked
+//the $(this).attr("data-id"); is used to check which card is being clicked
+//then the I used $(`#cardID${id}`).toggleClass("the-cardFlip"); which allows me to flip the card
+body.on("click", ".moreInfo", function (){
+    let id = $(this).attr("data-id");
+    $(`#cardID${id}`).toggleClass("the-cardFlip");
+});
+
+//This does the same as the previous event handler
+body.on("click", ".lessInfo", function (){
+    let id = $(this).attr("data-id");
+    $(`#cardID${id}`).toggleClass("the-cardFlip");
+});
+
+body.on("click", ".delete", function (){
+    let id = $(this).attr("data-id");
+    deleteMovie(id);
+
+});
+
+body.on("click", ".edit", function (){
+    let id = $(this).attr("data-id")
+    $(`#form${id}`).toggleClass("hidden")
+});
+
+
+body.on("click", ".submitMovies", function (){
+    let id = $(this).attr("data-id")
+    //gets this information from the form of the cards
+    let newMovieTitle = $(`#newTitle${id}`);
+    let newMovieRating = $(`#newRating${id}`);
+    let newWatched = $(`#newWatched${id}`);
+    let newMovie = {
+        id,
+        title: newMovieTitle[0].value,
+        rating: newMovieRating[0].value,
+        watched: newWatched[0].value,
+    }
+    editMovie(newMovie);
+});
+
+//add button when you click on it will take the value of addTitle and addRating and put them into a function
+//called addMovie which will render all the movies with the new movie added to existing
+$('#addButton').click(function (e) {
+    e.preventDefault();
+    let addNewTitle = $('#addTitle').val();
+    let addNewRating = $('#addRating').val();
+    let addNewWatched = $('#addWatched').val();
+    let mObj = {title: addNewTitle, rating: addNewRating, watched: addNewWatched};
+    addMovie(mObj);
+});
+
+//This function returns to a fetch that gets the movie information by using the title from
+// the other fetch with the getMovies
+function getMovieInfo(title){
+   return  fetch(`${MOVIEINFO}&t=${title}`)
+        .then(res => res.json())
+        .then(data2 => {
+            return data2
+        })
+        .catch(console.error);
+    }
+
+//This function takes the glitch data and the movie information
+// and returns a cards with both glitch data and movie information
 function renderMovies(data,movie){
-   return  `<article>
+    return  `<article>
 
     <div class="main-container"> 
-    
+<!-- data-id="data.id" let me target the cards individual
+  which lets me gives me differdt functionality like edit, flip and other things  -->
        <div class="the-card" id="cardID${data.id}"> 
             <div class="the-front card">
                 <img src="${movie.Poster}" alt="Movie poster"/>
@@ -52,7 +110,6 @@ function renderMovies(data,movie){
                         <input name="title" type="text" placeholder="Title" value="${data.title}" id="newTitle${data.id}"/>
                     </li>
                     <li>
-            <!--            <input class="addTitle" name="rating" type="text" placeholder="Rating" id="newRating${data.id}"/>-->
                           <label for="newRating${data.id}">Rating</label>
                           <select name="rating" id="newRating${data.id}">
                              <option value="1">1</option>
@@ -96,83 +153,4 @@ function renderMovies(data,movie){
 </article>`
 }
 
-const body = $('body');
-
-body.on("click", ".moreInfo", function (){
-    var id = $(this).attr("data-id");
-    console.log($(`#cardID${id}`).hasClass("the-cardFlip"));
-    $(`#cardID${id}`).toggleClass("the-cardFlip");
-    console.log($(`#cardID${id}`).hasClass("the-cardFlip"));
-    console.log(id);
-});
-
-body.on("click", ".lessInfo", function (){
-    var id = $(this).attr("data-id");
-    console.log($(`#cardID${id}`).hasClass("the-cardFlip"));
-    $(`#cardID${id}`).toggleClass("the-cardFlip");
-    console.log($(`#cardID${id}`).hasClass("the-cardFlip"));
-    console.log(id);
-});
-
-body.on("click", ".delete", function (){
-    var id = $(this).attr("data-id");
-    console.log(id);
-    deleteMovie(id);
-
-});
-
-body.on("click", ".edit", function (){
-    var id = $(this).attr("data-id")
-    console.log(id);
-    // console.log($(`#form${id}`).hasClass("hidden"));
-    $(`#form${id}`).toggleClass("hidden")
-    // console.log($(`#form${id}`).hasClass("hidden"));
-
-});
-
-
-body.on("click", ".submitMovies", function (){
-    // var newMovieT = $(this)[0].parentElement.parentElement.children[0].children[0].value
-    // var newMovieR = $(this)[0].parentElement.parentElement.children[1].children[0].value
-    var id = $(this).attr("data-id")
-    var newMovieTitle = $(`#newTitle${id}`);
-    console.log(newMovieTitle[0]);
-    var newMovieRating = $(`#newRating${id}`);
-    console.log(newMovieRating[0]);
-    var newWatched = $(`#newWatched${id}`);
-    console.log(newWatched[0]);
-    var newMovie = {
-        id,
-        title: newMovieTitle[0].value,
-        rating: newMovieRating[0].value,
-        watched: newWatched[0].value,
-    }
-    console.log(newMovie);
-    editMovie(newMovie);
-});
-
-function getMovieInfo(title){
-   return  fetch(`${POSTER}&t=${title}`)
-        .then(res => res.json())
-        .then(data2 => {
-            // console.log(data2)
-            return data2
-        })
-        .catch(console.error);
-    }
-
-    getMovies();
-
-//add button when you click on it will take the value of addTitle and addRating and put them into a function
-//called addMovie which will render all the movies with the new movie added to existing
-    $('#addButton').click(function (e) {
-        e.preventDefault();
-        let addNewTitle = $('#addTitle').val();
-        let addNewRating = $('#addRating').val();
-        let addNewWatched = $('#addWatched').val();
-        let mObj = {title: addNewTitle, rating: addNewRating, watched: addNewWatched};
-        addMovie(mObj);
-    });
-
-
-
+getMovies();
