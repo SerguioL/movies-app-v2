@@ -1,7 +1,7 @@
-#README
+# README
 
 ---
-##Movie App
+## Movie App
 This Movie app lets you keep track of movies you've watched and haven't watched. This is done by using a Glitch database and OMDb API. With this app you can add, save, edit and delete movie to a Glitch database.
 
 ---
@@ -14,7 +14,7 @@ This Movie app lets you keep track of movies you've watched and haven't watched.
 </ul>
 
 ---
-#Getting Started
+# Getting Started
 
 All you need to get started is to make a js file named keys.js inside the js directory with `const OMDP_API = "API_KEY";` in it.
 [OMDb API](http://www.omdbapi.com/)
